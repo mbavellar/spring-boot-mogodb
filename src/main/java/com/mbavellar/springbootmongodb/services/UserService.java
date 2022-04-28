@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.mbavellar.springbootmongodb.domain.User;
 import com.mbavellar.springbootmongodb.repositories.UserRepository;
+import com.mbavellar.springbootmongodb.services.exception.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -16,5 +17,9 @@ public class UserService {
   
   public List<User> findAll() {
     return repository.findAll();
+  }
+  
+  public User findById(String id) {
+    return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User Not Found" + id));
   }
 }
