@@ -42,4 +42,8 @@ public class PostService {
     post.setBody(updatedPost.getBody());
     return post;
   }
+  
+  public List<Post> findByTitle(String text) {
+    return repository.findByTitleContainingIgnoreCase(text);
+  }
 }
