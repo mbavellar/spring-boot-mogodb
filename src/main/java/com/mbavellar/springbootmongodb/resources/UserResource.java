@@ -37,7 +37,7 @@ public class UserResource {
   
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO) {
-    User user = service.insert(new User(userDTO.getId(), userDTO.getName(), userDTO.getEmail()));
+    User user = service.insert(getUserFromDTO(userDTO, null));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
     return ResponseEntity.created(uri).build();
   }
@@ -46,5 +46,16 @@ public class UserResource {
   public ResponseEntity<Void> delete(@PathVariable String id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
+  }
+  
+  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  public ResponseEntity<Void> update(@RequestBody UserDTO userDTO, @PathVariable String id) {
+    service.update(getUserFromDTO(userDTO, id));
+    return ResponseEntity.noContent().build();
+  }
+  
+  @SuppressWarnings("static-method")
+  private User getUserFromDTO(UserDTO userDTO, String id) {
+    return new User(id == null ? userDTO.getId() : id, userDTO.getName(), userDTO.getEmail());
   }
 }
