@@ -1,40 +1,33 @@
 package com.mbavellar.springbootmongodb.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mbavellar.springbootmongodb.dto.AuthorDTO;
 
-@Document(collection = "post")
-public class Post implements Serializable {
+@Document(collection = "comments")
+public class Comment implements Serializable {
 
   private static final long serialVersionUID = 1L;
   
   @Id
   private String id;
   private Date date;
-  private String title;
-  private String body;
+  private String text;
   
   private AuthorDTO author;
-  @DBRef(lazy = true)
-  private List<Comment> comments = new ArrayList<>();
   
-  public Post() {}
+  public Comment() {}
 
-  public Post(String id, Date date, String title, String body, AuthorDTO author) {
+  public Comment(String id, Date date, String text, AuthorDTO author) {
     super();
     this.id = id;
     this.date = date;
-    this.title = title;
-    this.body = body;
+    this.text = text;
     this.author = author;
   }
 
@@ -54,28 +47,16 @@ public class Post implements Serializable {
     this.date = date;
   }
 
-  public String getTitle() {
-    return title;
+  public String getText() {
+    return text;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setText(String text) {
+    this.text = text;
   }
 
-  public String getBody() {
-    return body;
-  }
-  
-  public void setBody(String body) {
-    this.body = body;
-  }
-  
   public AuthorDTO getAuthor() {
     return author;
-  }
-
-  public List<Comment> getComments() {
-    return comments;
   }
 
   @Override
@@ -91,7 +72,7 @@ public class Post implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Post other = (Post) obj;
+    Comment other = (Comment) obj;
     return Objects.equals(id, other.id);
   }
 }

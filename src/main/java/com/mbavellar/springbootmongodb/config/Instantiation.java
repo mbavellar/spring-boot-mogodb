@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import com.mbavellar.springbootmongodb.domain.Comment;
 import com.mbavellar.springbootmongodb.domain.Post;
 import com.mbavellar.springbootmongodb.domain.User;
 import com.mbavellar.springbootmongodb.dto.AuthorDTO;
+import com.mbavellar.springbootmongodb.repositories.CommentRepository;
 import com.mbavellar.springbootmongodb.repositories.PostRepository;
 import com.mbavellar.springbootmongodb.repositories.UserRepository;
 
@@ -21,6 +23,8 @@ public class Instantiation implements CommandLineRunner{
   private UserRepository userRepository;
   @Autowired
   private PostRepository postRepository;
+  @Autowired
+  private CommentRepository commentRepository;
   
   @Override
   public void run(String... args) throws Exception {
@@ -42,6 +46,17 @@ public class Instantiation implements CommandLineRunner{
         "Vou viajar para São Paulo, abraços!", new AuthorDTO(maria));
     Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia!",
         "Acordei feliz hoje!", new AuthorDTO(maria));
+    
+    commentRepository.deleteAll();
+    
+    Comment comment1 = new Comment(null, sdf.parse("21/03/2018"), "Boa viagem, mano!", new AuthorDTO(alex));
+    Comment comment2 = new Comment(null, sdf.parse("22/03/2018"), "Aproveite!", new AuthorDTO(bob));
+    Comment comment3 = new Comment(null, sdf.parse("23/03/2018"), "Tenha um ótimo dia!", new AuthorDTO(alex));
+    
+    commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3));
+    
+    post1.getComments().addAll(Arrays.asList(comment1, comment2));
+    post2.getComments().add(comment3);
     
     postRepository.saveAll(Arrays.asList(post1, post2));
     

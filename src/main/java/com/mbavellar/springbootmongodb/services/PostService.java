@@ -22,4 +22,24 @@ public class PostService {
   public Post findById(String id) {
     return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id));
   }
+  
+  public Post insert(Post post) {
+    return repository.insert(post);
+  }
+  
+  public void delete(String id) {
+    repository.deleteById(id);
+  }
+  
+  public Post update(Post post) {
+    return repository.save(updateData(post));
+  }
+  
+  private Post updateData(Post updatedPost) {
+    Post post = findById(updatedPost.getId());
+    post.setTitle(updatedPost.getTitle());
+    post.setDate(updatedPost.getDate());
+    post.setBody(updatedPost.getBody());
+    return post;
+  }
 }
