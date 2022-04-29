@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.mbavellar.springbootmongodb.domain.Post;
 import com.mbavellar.springbootmongodb.domain.User;
 import com.mbavellar.springbootmongodb.dto.UserDTO;
 import com.mbavellar.springbootmongodb.services.UserService;
@@ -52,6 +53,11 @@ public class UserResource {
   public ResponseEntity<Void> update(@RequestBody UserDTO userDTO, @PathVariable String id) {
     service.update(getUserFromDTO(userDTO, id));
     return ResponseEntity.noContent().build();
+  }
+  
+  @RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
+  public ResponseEntity<List<Post>> findAll(@PathVariable String id) {
+    return ResponseEntity.ok().body(service.findById(id).getPosts());
   }
   
   @SuppressWarnings("static-method")
